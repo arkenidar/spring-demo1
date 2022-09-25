@@ -12,6 +12,7 @@ public class JDBCDemos {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // http://localhost:8080/db
     @GetMapping(value="/db", produces = MediaType.TEXT_PLAIN_VALUE)
     public String index() {
         String response="";
