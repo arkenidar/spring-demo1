@@ -15,11 +15,17 @@ import java.util.List;
 
 @RestController
 public class JDBCDemos {
+    //private final JdbcTemplate jdbcTemplate; // https://spring.io/guides/gs/relational-data-access/
+
+    private final DBQuery<Customer> customerDBQuery;
+
     @Autowired
-    private JdbcTemplate jdbcTemplate; // https://spring.io/guides/gs/relational-data-access/
+    public JDBCDemos(JdbcTemplate jdbcTemplateAutowired) {
+        //jdbcTemplate = jdbcTemplateAutowired;
+        customerDBQuery = new Customer().setupDBQuery(jdbcTemplateAutowired);
+    }
 
-    private DBQuery<Customer> customerDBQuery;
-
+    /*
     // http://localhost:8080/db
     @GetMapping(value = "/db", produces = MediaType.TEXT_PLAIN_VALUE)
     public String index() {
@@ -30,15 +36,16 @@ public class JDBCDemos {
         }
         return response;
     }
+    */
 
     public List<Customer> findAll() { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
         // return new DBQuery<Customer>(jdbcTemplate, new Customer()).findAll();
-        return new Customer(jdbcTemplate).getDbQuery().findAll();
+        return customerDBQuery.findAll();
     }
 
     public Customer findById(int id) { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
         // return new DBQuery<Customer>(jdbcTemplate, new Customer()).findById(id);
-        return new Customer(jdbcTemplate).getDbQuery().findById(id);
+        return customerDBQuery.findById(id);
     }
 
     // http://localhost:8080/db2
