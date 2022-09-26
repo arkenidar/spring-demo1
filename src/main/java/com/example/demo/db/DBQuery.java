@@ -1,15 +1,22 @@
 package com.example.demo.db;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class DBQuery<T extends TableEntity<T>> {
     private final JdbcTemplate jdbcTemplate; // https://spring.io/guides/gs/relational-data-access/
-    private final T instance;
+    private T instance;
 
-    public DBQuery(JdbcTemplate jdbcTemplate, T instance) {
+    @Autowired
+    DBQuery(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setInstance(T instance) {
         this.instance = instance;
     }
 

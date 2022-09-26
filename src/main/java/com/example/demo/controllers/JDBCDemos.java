@@ -32,11 +32,13 @@ public class JDBCDemos {
     }
 
     public List<Customer> findAll() { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
-        return new DBQuery<Customer>(jdbcTemplate, new Customer()).findAll();
+        // return new DBQuery<Customer>(jdbcTemplate, new Customer()).findAll();
+        return new Customer(jdbcTemplate).getDbQuery().findAll();
     }
 
     public Customer findById(int id) { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
-        return new DBQuery<Customer>(jdbcTemplate, new Customer()).findById(id);
+        // return new DBQuery<Customer>(jdbcTemplate, new Customer()).findById(id);
+        return new Customer(jdbcTemplate).getDbQuery().findById(id);
     }
 
     // http://localhost:8080/db2

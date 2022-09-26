@@ -1,9 +1,14 @@
 package com.example.demo.db;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
+@Component
 public class Customer implements TableEntity<Customer> {
     // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
     private long id;
@@ -11,7 +16,14 @@ public class Customer implements TableEntity<Customer> {
     private int age;
     private LocalDateTime created_date;
 
-    public Customer() {
+    private JdbcTemplate jdbcTemplate; // https://spring.io/guides/gs/relational-data-access/
+    private DBQuery<Customer> dbQuery;
+
+    @Autowired
+    public Customer(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        dbQuery = new DBQuery<>(jdbcTemplate);
+        dbQuery.setInstance(this);
     }
 
     public Customer(long id, String name, int age, LocalDateTime created_date) {
@@ -19,6 +31,10 @@ public class Customer implements TableEntity<Customer> {
         this.name = name;
         this.age = age;
         this.created_date = created_date;
+    }
+
+    public DBQuery<Customer> getDbQuery() {
+        return dbQuery;
     }
 
     @Override
