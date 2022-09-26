@@ -1,10 +1,10 @@
-package com.example.demo.controllers;
+package com.example.demo.db;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class Customer extends TableEntity<Customer> {
+public class Customer implements TableEntity<Customer> {
     // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
     private long id;
     private String name;

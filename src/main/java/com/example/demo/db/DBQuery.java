@@ -1,4 +1,4 @@
-package com.example.demo.controllers;
+package com.example.demo.db;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 

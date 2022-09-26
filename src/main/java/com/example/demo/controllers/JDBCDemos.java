@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import com.example.demo.db.Customer;
+import com.example.demo.db.DBQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
