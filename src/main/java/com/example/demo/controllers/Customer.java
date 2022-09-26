@@ -4,11 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-public class Customer {
-    private final long id;
-    private final String name;
-    private final int age;
-    private final LocalDateTime created_date;
+public class Customer extends TableEntity<Customer> {
+    // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
+    private long id;
+    private String name;
+    private int age;
+    private LocalDateTime created_date;
+
+    public Customer() {
+    }
 
     public Customer(long id, String name, int age, LocalDateTime created_date) {
         this.id = id;
@@ -17,7 +21,8 @@ public class Customer {
         this.created_date = created_date;
     }
 
-    static Customer fromResultSet(ResultSet resultSet) throws SQLException {
+    @Override
+    public Customer fromResultSet(ResultSet resultSet, int rowNum) throws SQLException {
         return new Customer(
                 resultSet.getLong("id"),
                 resultSet.getString("name"),
@@ -52,5 +57,8 @@ public class Customer {
         return created_date;
     }
 
-    public static final String TABLE = " \"Customer\" ";
+    @Override
+    public String tableName() {
+        return " \"Customer\" ";
+    }
 }

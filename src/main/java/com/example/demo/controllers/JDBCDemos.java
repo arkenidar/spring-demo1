@@ -16,6 +16,8 @@ public class JDBCDemos {
     @Autowired
     private JdbcTemplate jdbcTemplate; // https://spring.io/guides/gs/relational-data-access/
 
+    private DBQuery<Customer> customerDBQuery;
+
     // http://localhost:8080/db
     @GetMapping(value = "/db", produces = MediaType.TEXT_PLAIN_VALUE)
     public String index() {
@@ -28,24 +30,11 @@ public class JDBCDemos {
     }
 
     public List<Customer> findAll() { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
-
-        String sql = "SELECT * FROM " + Customer.TABLE;
-
-        return jdbcTemplate.query( // or queryForObject()
-                sql,
-                (rs, rowNum) -> Customer.fromResultSet(rs)
-        );
+        return new DBQuery<Customer>(jdbcTemplate, new Customer()).findAll();
     }
 
     public Customer findById(int id) { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
-
-        String sql = "SELECT * FROM " + Customer.TABLE + " WHERE id=?";
-
-        return jdbcTemplate.queryForObject( // or query()
-                sql,
-                (rs, rowNum) -> Customer.fromResultSet(rs),
-                id
-        );
+        return new DBQuery<Customer>(jdbcTemplate, new Customer()).findById(id);
     }
 
     // http://localhost:8080/db2
