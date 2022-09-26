@@ -1,18 +1,29 @@
 package com.example.demo.controllers;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class Customer {
-    private long id;
-    private String name;
-    private int age;
-    private LocalDateTime created_date;
+    private final long id;
+    private final String name;
+    private final int age;
+    private final LocalDateTime created_date;
 
     public Customer(long id, String name, int age, LocalDateTime created_date) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.created_date = created_date;
+    }
+
+    static Customer fromResultSet(ResultSet resultSet) throws SQLException {
+        return new Customer(
+                resultSet.getLong("id"),
+                resultSet.getString("name"),
+                resultSet.getInt("age"),
+                resultSet.getTimestamp("created_date").toLocalDateTime()
+        );
     }
 
     @Override

@@ -31,13 +31,7 @@ public class JDBCDemos {
 
         return jdbcTemplate.query( // or queryForObject()
                 sql,
-                (rs, rowNum) ->
-                        new Customer(
-                                rs.getLong("id"),
-                                rs.getString("name"),
-                                rs.getInt("age"),
-                                rs.getTimestamp("created_date").toLocalDateTime()
-                        )
+                (rs, rowNum) -> Customer.fromResultSet(rs)
         );
     }
 
