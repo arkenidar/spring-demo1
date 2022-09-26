@@ -51,4 +51,6 @@ public class Customer {
     public LocalDateTime getCreated_date() {
         return created_date;
     }
+
+    public static final String TABLE = " \"Customer\" ";
 }

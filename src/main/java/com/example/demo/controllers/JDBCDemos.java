@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,11 +28,22 @@ public class JDBCDemos {
 
     public List<Customer> findAll() { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
 
-        String sql = "SELECT * FROM \"Customer\" ";
+        String sql = "SELECT * FROM " + Customer.TABLE;
 
         return jdbcTemplate.query( // or queryForObject()
                 sql,
                 (rs, rowNum) -> Customer.fromResultSet(rs)
+        );
+    }
+
+    public Customer findById(int id) { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
+
+        String sql = "SELECT * FROM " + Customer.TABLE + " WHERE id=?";
+
+        return jdbcTemplate.queryForObject( // or query()
+                sql,
+                (rs, rowNum) -> Customer.fromResultSet(rs),
+                id
         );
     }
 
@@ -51,6 +63,12 @@ public class JDBCDemos {
     @GetMapping(value = "/db3")
     public List<Customer> findAllToJSON() {
         return findAll();
+    }
+
+    // http://localhost:8080/db4
+    @GetMapping(value = "/db4")
+    public Customer findByIdToJSON(@RequestParam(defaultValue = "1") int id) {
+        return findById(id);
     }
 
 }
