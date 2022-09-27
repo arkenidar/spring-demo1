@@ -8,15 +8,12 @@ import java.time.LocalDateTime;
 
 public class Customer implements TableEntity<Customer> {
     // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
-    private long id;
-    private String name;
-    private int age;
-    private LocalDateTime created_date;
-
-    private DBQuery<Customer> dbQuery;
+    public long id;
+    public String name;
+    public int age;
+    public LocalDateTime created_date;
 
     public Customer() {
-
     }
 
     public Customer(long id, String name, int age, LocalDateTime created_date) {
@@ -27,7 +24,7 @@ public class Customer implements TableEntity<Customer> {
     }
 
     public DBQuery<Customer> setupDBQuery(JdbcTemplate jdbcTemplate) {
-        dbQuery = new DBQuery<>(jdbcTemplate);
+        DBQuery<Customer> dbQuery = new DBQuery<>(jdbcTemplate);
         dbQuery.setInstance(this);
         return dbQuery;
     }
@@ -50,22 +47,6 @@ public class Customer implements TableEntity<Customer> {
                 ", age=" + age +
                 ", created_date=" + created_date +
                 '}';
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public LocalDateTime getCreated_date() {
-        return created_date;
     }
 
     @Override
