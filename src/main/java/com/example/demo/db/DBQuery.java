@@ -40,4 +40,10 @@ public class DBQuery<T extends TableEntity<T>> {
                 id
         );
     }
+
+    public int update(T object) {
+        String sql = object.updateSQL();
+        Object[] params = object.updateParams();
+        return jdbcTemplate.update(sql, params);
+    }
 }

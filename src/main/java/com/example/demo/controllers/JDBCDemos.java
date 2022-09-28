@@ -47,4 +47,12 @@ public class JDBCDemos {
         }
     }
 
+    @GetMapping("update_customer")
+    public Customer updateCustomer(@RequestParam(defaultValue = "1") int id) {
+        Customer customer = customerDBQuery.findById(id);
+        customer.age++; // for Testing
+        customerDBQuery.update(customer);
+        return customer;
+    }
+
 }

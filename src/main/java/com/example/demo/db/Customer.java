@@ -53,4 +53,15 @@ public class Customer implements TableEntity<Customer> {
     public String tableName() {
         return " \"Customer\" ";
     }
+
+    @Override
+    public String updateSQL() {
+        return "UPDATE " + tableName() + " SET name=?, age=? WHERE id=? ";
+    }
+
+    @Override
+    public Object[] updateParams(){
+        return new Object[]{name,age,id};
+    }
+
 }

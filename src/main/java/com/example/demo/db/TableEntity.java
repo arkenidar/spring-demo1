@@ -7,4 +7,8 @@ public interface TableEntity<T> {
     String tableName();
 
     T fromResultSet(ResultSet resultSet, int rowNum) throws SQLException;
+
+    String updateSQL();
+
+    Object[] updateParams();
 }
