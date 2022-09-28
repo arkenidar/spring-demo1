@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class JDBCDemos {
@@ -25,52 +25,23 @@ public class JDBCDemos {
         customerDBQuery = new Customer().setupDBQuery(jdbcTemplateAutowired);
     }
 
-    /*
-    // http://localhost:8080/db
-    @GetMapping(value = "/db", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String index() {
-        String response = "";
-        SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("select * from users_login");
-        while (sqlRowSet.next()) {
-            response += sqlRowSet.getString("user_name") + "\n";
-        }
-        return response;
-    }
-    */
-
-    public List<Customer> findAll() { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
-        // return new DBQuery<Customer>(jdbcTemplate, new Customer()).findAll();
-        return customerDBQuery.findAll();
-    }
-
-    public Customer findById(int id) { // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
-        // return new DBQuery<Customer>(jdbcTemplate, new Customer()).findById(id);
-        return customerDBQuery.findById(id);
-    }
-
     // http://localhost:8080/db2
     @GetMapping(value = "/db2", produces = MediaType.TEXT_PLAIN_VALUE)
     public String findAllToText() {
-        String response = "";
-        // SqlRowSet sqlRowSet=jdbcTemplate.queryForRowSet("select * from users_login");
-        // while (sqlRowSet.next()) response+=sqlRowSet.getString("user_name")+"\n";
-        List<Customer> customers = findAll();
-        for (Customer customer : customers)
-            response += customer + "\n";
-        return response;
+        return customerDBQuery.findAll().stream().map(Customer::toString).collect(Collectors.joining("\n"));
     }
 
     // http://localhost:8080/db3
     @GetMapping(value = "/db3")
     public List<Customer> findAllToJSON() {
-        return findAll();
+        return customerDBQuery.findAll();
     }
 
     // http://localhost:8080/db4
     @GetMapping(value = "/db4")
     public Customer findByIdToJSON(@RequestParam(defaultValue = "1") int id) {
         try {
-            return findById(id);
+            return customerDBQuery.findById(id);
         } catch (EmptyResultDataAccessException exception) {
             return null;
         }
