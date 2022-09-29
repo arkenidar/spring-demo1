@@ -2,12 +2,12 @@ package com.example.demo.db;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class Customer implements TableEntity<Customer> {
-    // https://mkyong.com/spring/spring-jdbctemplate-querying-examples/
     public long id;
     public String name;
     public int age;
@@ -21,6 +21,38 @@ public class Customer implements TableEntity<Customer> {
         this.name = name;
         this.age = age;
         this.created_date = created_date;
+    }
+
+    public LocalDateTime getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(LocalDateTime created_date) {
+        this.created_date = created_date;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public DBQuery<Customer> setupDBQuery(JdbcTemplate jdbcTemplate) {
@@ -60,8 +92,29 @@ public class Customer implements TableEntity<Customer> {
     }
 
     @Override
-    public Object[] updateParams(){
-        return new Object[]{name,age,id};
+    public Object[] updateParams() {
+        return new Object[]{name, age, id};
     }
 
+    @Override
+    public String addSQL() {
+        return "INSERT INTO " + tableName() + " (name,age) VALUES (?,?)";
+    }
+
+    @Override
+    public PreparedStatement addParams(PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setString(1, name);
+        preparedStatement.setInt(2, age);
+        return preparedStatement;
+    }
+
+    @Override
+    public String deleteSQL() {
+        return "DELETE FROM " + tableName() + " WHERE id=? ";
+    }
+
+    @Override
+    public Object[] deleteParams() {
+        return new Object[]{id};
+    }
 }

@@ -25,6 +25,6 @@ public class FreemarkerJDBCDemos {
         while (sqlRowSet.next()) list2.add(sqlRowSet.getString("user_name"));
         //List<String> list = Arrays.asList(new String[]{"first", "second"});
         myMap.put("list", list2);
-        return new ModelAndView("freemarker-demo", myMap);
+        return new ModelAndView("test_freemarker", myMap);
     }
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${html_title}"></title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width" name="viewport">
+</head>
+<body>
+Customer <a href="customer_list.html">list</a> <br>
+<form method="post" th:action="@{customer_update.html}" th:object="${customer}">
+    Name: <br>
+    <input th:field="*{name}"> <br>
+    Age: <br>
+    <input th:field="*{age}"> <br>
+
+    hidden id: <input th:field="*{id}"> <br>
+    hidden action: <input name="action" th:value="${action}"> <br>
+
+    <input th:value="${action}" type="submit">
+</form>
+</body>
+</html>

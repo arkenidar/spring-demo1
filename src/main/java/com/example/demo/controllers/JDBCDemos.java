@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,34 +25,73 @@ public class JDBCDemos {
         customerDBQuery = new Customer().setupDBQuery(jdbcTemplateAutowired);
     }
 
-    // http://localhost:8080/db2
-    @GetMapping(value = "/db2", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "customers.txt", produces = MediaType.TEXT_PLAIN_VALUE)
     public String findAllToText() {
         return customerDBQuery.findAll().stream().map(Customer::toString).collect(Collectors.joining("\n"));
     }
 
-    // http://localhost:8080/db3
-    @GetMapping(value = "/db3")
+    @GetMapping(value = "customers.json")
     public List<Customer> findAllToJSON() {
         return customerDBQuery.findAll();
     }
 
-    // http://localhost:8080/db4
-    @GetMapping(value = "/db4")
-    public Customer findByIdToJSON(@RequestParam(defaultValue = "1") int id) {
+    @GetMapping(value = "customer_find.json")
+    public Customer findByIdToJSON(@RequestParam long param_id) {
         try {
-            return customerDBQuery.findById(id);
+            return customerDBQuery.findById(param_id);
         } catch (EmptyResultDataAccessException exception) {
             return null;
         }
     }
 
-    @GetMapping("update_customer")
-    public Customer updateCustomer(@RequestParam(defaultValue = "1") int id) {
+    @RequestMapping("customer_update.json")
+    public Customer updateCustomer(@RequestParam(defaultValue = "1") long id) {
         Customer customer = customerDBQuery.findById(id);
         customer.age++; // for Testing
         customerDBQuery.update(customer);
         return customer;
     }
 
+    @RequestMapping("customer_update.html")
+    public ModelAndView customerUpdateHtml(
+            @ModelAttribute Customer customer
+            , @RequestParam(defaultValue = "-1") long param_id
+            , @RequestParam(defaultValue = "update") String action
+    ) throws SQLException {
+        if (action.equals("update") && customer.id != 0)
+            customerDBQuery.update(customer);
+        else if (action.equals("add") && customer.id == 0 && param_id == -1)
+            param_id = customerDBQuery.add(customer);
+
+        if (param_id != -1 && (action.equals("update") || action.equals("add")))
+            customer = customerDBQuery.findById(param_id);
+
+        ModelAndView modelAndView = new ModelAndView("customer_thymeleaf");
+        modelAndView.addObject("html_title", "customer update");
+        modelAndView.addObject("action", "update");
+        modelAndView.addObject("customer", customer);
+        return modelAndView;
+    }
+
+    @RequestMapping("customer_add.html")
+    public ModelAndView customerAdd() {
+        ModelAndView modelAndView = new ModelAndView("customer_thymeleaf");
+        modelAndView.addObject("html_title", "customer add");
+        modelAndView.addObject("action", "add");
+        modelAndView.addObject("customer", new Customer());
+        return modelAndView;
+    }
+
+    @RequestMapping("customer_list.html")
+    public ModelAndView listCustomersHtml(@RequestParam(defaultValue = "-1") long param_id) {
+        try {
+            if (param_id != -1)
+                customerDBQuery.delete(customerDBQuery.findById(param_id));
+        } catch (EmptyResultDataAccessException emptyResultDataAccessException) {
+        }
+        ModelAndView modelAndView = new ModelAndView("customer_freemarker");
+        modelAndView.addObject("html_title", "customers");
+        modelAndView.addObject("customers", customerDBQuery.findAll());
+        return modelAndView;
+    }
 }

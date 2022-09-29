@@ -12,14 +12,14 @@ public class SessionDemos {
     @Autowired
     private HttpSession httpSession;
 
-    @GetMapping(value="/counter", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/counter", produces = MediaType.TEXT_PLAIN_VALUE)
     public String counter() {
         int counter;
-        if(httpSession.getAttribute("counter")==null)
-            counter=0;
+        if (httpSession.getAttribute("counter") == null)
+            counter = 0;
         else
-            counter=1+(int)httpSession.getAttribute("counter");
+            counter = 1 + (int) httpSession.getAttribute("counter");
         httpSession.setAttribute("counter", counter);
-        return counter+"\n";
+        return counter + "\n";
     }
 }
