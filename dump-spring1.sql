@@ -27,12 +27,14 @@ SET default_table_access_method = heap;
 -- Name: users_login; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.users_login (
+CREATE TABLE public.users_login
+(
     user_name character varying
 );
 
 
-ALTER TABLE public.users_login OWNER TO postgres;
+ALTER TABLE public.users_login
+    OWNER TO postgres;
 
 --
 -- TOC entry 3991 (class 0 OID 16413)
