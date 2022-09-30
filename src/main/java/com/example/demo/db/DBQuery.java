@@ -67,18 +67,18 @@ public class DBQuery<T extends TableEntity<T>> {
         return keys.getLong(1);
     }
 
+    public void delete(T object) {
+        String sql = object.deleteSQL();
+        Object[] params = object.deleteParams();
+        jdbcTemplate.update(sql, params);
+    }
+
     interface operationSQL {
         String get();
     }
 
     interface operationParams {
         PreparedStatement get(PreparedStatement params) throws SQLException;
-    }
-
-    public void delete(T object) {
-        String sql = object.deleteSQL();
-        Object[] params = object.deleteParams();
-        jdbcTemplate.update(sql, params);
     }
 
 }

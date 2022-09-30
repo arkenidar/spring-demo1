@@ -13,8 +13,8 @@ Customer <a href="customer_list.html">list</a> <br>
     Age: <br>
     <input th:field="*{age}"> <br>
 
-    hidden id: <input th:field="*{id}"> <br>
-    hidden action: <input name="action" th:value="${action}"> <br>
+    <input name="id" th:value="${customer.id}" type="hidden">
+    <input name="action" th:value="${action}" type="hidden">
 
     <input th:value="${action}" type="submit">
 </form>
