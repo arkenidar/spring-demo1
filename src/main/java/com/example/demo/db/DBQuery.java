@@ -49,18 +49,30 @@ public class DBQuery<T extends TableEntity<T>> {
     }
 
     public long add(T object) throws SQLException {
-        String sql = object.addSQL();
+        return updateWithKeys(object::addSQL, object::addParams);
+    }
+
+    private long updateWithKeys(operationSQL addSQL, operationParams addParams) throws SQLException {
+        String sql = addSQL.get();
 
         Connection connection = Objects.requireNonNull(jdbcTemplate.getDataSource()).getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-        preparedStatement = object.addParams(preparedStatement);
+        preparedStatement = addParams.get(preparedStatement);
 
         preparedStatement.executeUpdate();
 
         ResultSet keys = preparedStatement.getGeneratedKeys();
         keys.next();
         return keys.getLong(1);
+    }
+
+    interface operationSQL {
+        String get();
+    }
+
+    interface operationParams {
+        PreparedStatement get(PreparedStatement params) throws SQLException;
     }
 
     public void delete(T object) {
