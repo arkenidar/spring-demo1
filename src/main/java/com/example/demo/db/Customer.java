@@ -83,7 +83,7 @@ public class Customer implements TableEntity<Customer> {
 
     @Override
     public String tableName() {
-        return " \"Customer\" ";
+        return "customers";
     }
 
     @Override
