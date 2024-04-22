@@ -1,6 +1,5 @@
 package com.example.demo.db;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,6 @@ public class DBQuery<T extends TableEntity<T>> {
     private final JdbcTemplate jdbcTemplate;
     private T instance;
 
-    @Autowired
     DBQuery(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

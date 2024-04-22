@@ -2,7 +2,6 @@ package com.example.demo.controllers;
 
 import com.example.demo.db.Customer;
 import com.example.demo.db.DBQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,7 +18,6 @@ public class JDBCDemos {
 
     private final DBQuery<Customer> customerDBQuery;
 
-    @Autowired
     public JDBCDemos(JdbcTemplate jdbcTemplateAutowired) {
         //jdbcTemplate = jdbcTemplateAutowired;
         customerDBQuery = new Customer().setupDBQuery(jdbcTemplateAutowired);
